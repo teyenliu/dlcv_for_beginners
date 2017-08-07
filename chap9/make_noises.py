@@ -16,11 +16,14 @@ def make_noise(index):
     h = np.random.randint(1, H_IMG)
     w = np.random.randint(1, W_IMG)
     noise = np.random.random((h, w))
-    noisy_img = cv2.resize(noise, (H_IMG, W_IMG), interpolation=cv2.INTER_CUBIC)
+    tmp_img = cv2.resize(noise, (H_IMG, W_IMG), interpolation=cv2.INTER_CUBIC)
+    tmp_img = np.float32(tmp_img)
+    noisy_img = cv2.cvtColor(tmp_img, cv2.COLOR_GRAY2BGR) 
+
     fx = float(w) / float(W_IMG)
     fy = float(h) / float(H_IMG)
     filename = '{}/{:0>5d}_{}_{}.jpg'.format(SAMPLES_DIR, index, fx, fy)
-    plt.imsave(filename, noisy_img, cmap='gray')
+    cv2.imwrite(filename, noisy_img)
 
 def make_noises(i0, i1):
     np.random.seed(datetime.datetime.now().microsecond)
